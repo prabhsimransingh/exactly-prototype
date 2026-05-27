@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Exactly — Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAF8F5;
+    --surface: #FFFFFF;
+    --accent: #E8622A;
+    --text: #1A1A1A;
+    --text-soft: #4A4A4A;
+    --muted: #8A8A8A;
+    --border: #E5E0D8;
+    --border-soft: #EEEAE2;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg);
+    font-family: 'DM Sans', -apple-system, system-ui, sans-serif;
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+  }
+  .serif { font-family: 'Fraunces', Georgia, serif; }
+  .app {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--bg);
+    position: relative;
+    overflow-x: hidden;
+  }
+  .screen { padding: 24px; min-height: 100vh; display: none; }
+  .screen.active { display: block; }
+  .flex { display: flex; }
+  .between { justify-content: space-between; align-items: center; }
+  .center { justify-content: center; align-items: center; }
+  .col { flex-direction: column; }
+  .gap-12 { gap: 12px; }
+  .gap-8 { gap: 8px; }
+  .mt-24 { margin-top: 24px; }
+  .mb-24 { margin-bottom: 24px; }
+  .mb-16 { margin-bottom: 16px; }
+  .mb-8 { margin-bottom: 8px; }
+  .mb-4 { margin-bottom: 4px; }
+
+  h1.title { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  h2.heading { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; line-height: 1.2; letter-spacing: -0.5px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  .label { font-size: 13px; color: var(--muted); }
+
+  /* Avatar */
+  .avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--accent); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-weight: 600; font-size: 16px;
+    cursor: pointer; border: none;
+  }
+  .avatar.lg { width: 56px; height: 56px; font-size: 22px; }
+
+  /* Card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+  }
+
+  /* Input */
+  textarea, input[type=password], input[type=text] {
+    width: 100%; padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    font-family: inherit; font-size: 15px; color: var(--text);
+    outline: none; resize: none;
+  }
+  textarea { min-height: 100px; }
+  textarea:focus, input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,98,42,0.08); }
+
+  /* Button */
+  .btn {
+    width: 100%; padding: 14px;
+    background: var(--accent); color: white;
+    border: none; border-radius: 14px;
+    font-family: inherit; font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: opacity .15s;
+  }
+  .btn:active { opacity: 0.85; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn.secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+
+  /* Usage strip */
+  .usage-strip {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 10px 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px;
+  }
+  .meter { width: 80px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .meter > div { height: 100%; background: var(--accent); transition: width .3s; }
+
+  /* Thinking dots */
+  .dots { display: inline-flex; gap: 6px; }
+  .dots span {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  .dots span:nth-child(2) { animation-delay: 0.2s; }
+  .dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes pulse { 0%,80%,100% { opacity: 0.3; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1); } }
+
+  /* Result */
+  .result-image {
+    width: 100%; height: 260px; border-radius: 16px;
+    object-fit: cover; background: var(--border);
+  }
+  .highlight {
+    font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700;
+    color: var(--accent); margin-bottom: 6px;
+  }
+  .tail { font-size: 17px; color: var(--text); line-height: 1.4; margin-bottom: 16px; }
+  .why { font-size: 14px; color: var(--text-soft); line-height: 1.55; margin-bottom: 16px; }
+  .price-row {
+    padding-top: 14px; margin-bottom: 16px;
+    border-top: 1px solid var(--border-soft);
+  }
+  .price { font-size: 18px; font-weight: 600; }
+  .next-step {
+    background: var(--bg); border-radius: 12px; padding: 12px;
+    font-size: 13px; color: var(--text); line-height: 1.5;
+  }
+  .back-btn { background: none; border: none; font-family: inherit; font-size: 15px; color: var(--text); cursor: pointer; padding: 8px 0; }
+
+  /* Password screen */
+  .lock-screen {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 24px;
+  }
+  .lock-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 32px 24px; width: 100%; max-width: 360px;
+    text-align: center;
+  }
+  .lock-card h1 { font-size: 36px; margin-bottom: 4px; }
+  .lock-card .sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+  .error-msg { color: #c33; font-size: 13px; margin-top: 8px; min-height: 18px; }
+
+  /* Banner */
+  .demo-banner {
+    background: #FFF3E0; border-bottom: 1px solid #FFD8A8;
+    padding: 8px 16px; text-align: center;
+    font-size: 12px; color: #B85C00;
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <!-- LOCK SCREEN -->
+  <section class="screen active" id="screen-lock">
+    <div class="lock-screen">
+      <div class="lock-card">
+        <h1 class="serif">Exactly</h1>
+        <p class="sub">Password-protected prototype</p>
+        <input type="password" id="pw-input" placeholder="Enter password" autocomplete="off" />
+        <div class="error-msg" id="pw-error"></div>
+        <button class="btn" style="margin-top: 16px;" onclick="unlock()">Unlock</button>
+        <p class="muted" style="margin-top: 20px; font-size: 11px;">UI prototype with mock data. No backend.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOME -->
+  <section class="screen" id="screen-home">
+    <div class="demo-banner">Prototype mode — recommendations are mocked</div>
+    <div style="padding: 16px 24px 24px;">
+      <div class="flex between mb-24" style="margin-top: 8px;">
+        <h1 class="serif title">Exactly.</h1>
+        <button class="avatar" onclick="go('account')">T</button>
+      </div>
+
+      <div class="usage-strip mb-24">
+        <span id="usage-text">3 queries left today</span>
+        <div class="meter"><div id="usage-bar" style="width: 0%;"></div></div>
+      </div>
+
+      <h2 class="heading mb-16">What do you need?</h2>
+      <textarea id="query-input" placeholder="Gift for my dad, I'm bored, need a desk lamp..."></textarea>
+      <div id="home-error" style="color:#c33; font-size:13px; margin: 8px 0; display:none;"></div>
+      <button class="btn mt-24" onclick="submitQuery()">Get Recommendation</button>
+
+      <div class="muted" style="text-align:center; margin-top: 32px; font-size: 12px;">
+        Try: "gift for my dad" · "I'm bored" · "work from home"
+      </div>
+    </div>
+  </section>
+
+  <!-- THINKING -->
+  <section class="screen" id="screen-thinking">
+    <div class="lock-screen">
+      <p class="muted mb-16" style="text-align: center; padding: 0 24px;" id="thinking-query">Finding the perfect recommendation...</p>
+      <div class="dots"><span></span><span></span><span></span></div>
+      <p class="muted" style="margin-top: 16px; font-size: 12px;">~2 seconds</p>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="screen" id="screen-result">
+    <button class="back-btn mb-16" onclick="askAnother()">← Back</button>
+    <img class="result-image mb-16" id="result-image" alt="" />
+    <div class="card mb-16">
+      <div class="highlight" id="result-highlight"></div>
+      <div class="tail" id="result-tail"></div>
+      <div class="why" id="result-why"></div>
+      <div class="price-row">
+        <div class="label mb-4">Price & Availability</div>
+        <div class="price mb-4" id="result-price"></div>
+        <div class="muted" id="result-store"></div>
+      </div>
+      <div class="next-step">
+        <div class="label mb-4">Next Step</div>
+        <div id="result-next"></div>
+      </div>
+    </div>
+    <button class="btn mb-8" onclick="alert('In production, this opens the store link.')">Get It Now</button>
+    <button class="btn secondary" onclick="askAnother()">Ask Another</button>
+  </section>
+
+  <!-- USAGE LIMIT -->
+  <section class="screen" id="screen-limit">
+    <div class="lock-screen">
+      <h2 class="heading mb-16" style="text-align:center;">Daily limit reached</h2>
+      <p class="muted mb-24" style="text-align:center; max-width: 320px;">You've used all 3 free queries for today. Resets at midnight, or upgrade for unlimited.</p>
+      <div style="width: 100%; max-width: 320px;">
+        <button class="btn mb-8" onclick="go('account')">Upgrade to Pro · $4.99/mo</button>
+        <button class="btn secondary" onclick="go('home')">Go Back</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACCOUNT -->
+  <section class="screen" id="screen-account">
+    <button class="back-btn mb-16" onclick="go('home')">← Back</button>
+    <h1 class="serif title mb-24" style="text-align:center;">Account</h1>
+    <div class="flex" style="gap:14px; margin-bottom: 28px; align-items:center;">
+      <div class="avatar lg">T</div>
+      <div>
+        <div class="serif" style="font-size:20px; font-weight:600;">Test User</div>
+        <div class="muted">test@exactly.app</div>
+      </div>
+    </div>
+    <div class="card mb-16">
+      <div style="font-weight:600; margin-bottom: 8px;" id="account-usage">3 of 3 free queries used today</div>
+      <div class="muted mb-16">Resets at midnight</div>
+      <div class="meter mb-16" style="width:100%;"><div id="account-bar" style="width: 0%;"></div></div>
+      <div style="padding-top: 16px; border-top: 1px solid var(--border-soft);">
+        <p style="font-size: 13px; color: var(--text-soft); margin-bottom: 12px;">
+          You're on the <b>Free</b> plan. Upgrade for unlimited queries.
+        </p>
+        <button class="btn" onclick="alert('Prototype: payment is disabled. In production, this opens Stripe checkout.')">Upgrade to Pro · $4.99/mo</button>
+      </div>
+    </div>
+    <div class="card">
+      <div style="padding: 4px 0;">Saved recommendations</div>
+      <div style="padding: 12px 0 4px; border-top: 1px solid var(--border-soft); margin-top: 12px;">Sign out</div>
+    </div>
+    <p class="muted" style="text-align:center; margin-top: 24px; font-size: 11px;">Prototype — actions are simulated</p>
+  </section>
+</div>
+
+<script>
+  // ===== State =====
+  const STATE = {
+    dailyUsage: 0,
+    limit: 3,
+  };
+
+  // ===== Mock recommendations =====
+  const MOCK = {
+    gift: {
+      highlight: "A Hario V60 dripper",
+      tail: "with a bag of single-origin beans from a local roaster.",
+      why: "It's the gift that becomes a daily ritual. Pour-over coffee is meditative, the V60 is iconic, and pairing it with great beans makes it instantly useful. Better than another tie.",
+      price: "$28 + $18 beans",
+      store: "Blue Bottle, local roasters, or Amazon",
+      image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&q=85&auto=format&fit=crop",
+      next: "Pick a medium-roast bean and write a short note explaining the ritual."
+    },
+    bored: {
+      highlight: "Learn to play guitar",
+      tail: "starting with JustinGuitar's free beginner course.",
+      why: "It's tactile, lifelong, and immediately rewarding. Within two weeks you'll play recognizable songs. Cheaper than therapy, more fun than scrolling.",
+      price: "$80 used acoustic",
+      store: "Facebook Marketplace or Guitar Center",
+      image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=900&q=85&auto=format&fit=crop",
+      next: "Buy a used guitar today and finish Lesson 1 tonight."
+    },
+    work: {
+      highlight: "A BenQ ScreenBar",
+      tail: "monitor light that clips onto your screen.",
+      why: "It eliminates desk clutter, reduces eye strain immediately, and auto-adjusts to ambient light. Your home office will feel instantly more intentional.",
+      price: "$109",
+      store: "BenQ direct or Amazon",
+      image: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=900&q=85&auto=format&fit=crop",
+      next: "Order today, set it up tomorrow morning before your first call."
+    },
+    travel: {
+      highlight: "The Tom Bihn Synik 22",
+      tail: "carry-on backpack for short trips.",
+      why: "Built like a tank, opens flat like a suitcase, and fits under any seat. The last bag you'll need to buy for years.",
+      price: "$340",
+      store: "tombihn.com",
+      image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=900&q=85&auto=format&fit=crop",
+      next: "Order the Aubergine or Black colorway — both age beautifully."
+    },
+    default: {
+      highlight: "Try the Pomodoro technique",
+      tail: "with a free app like Forest or a simple kitchen timer.",
+      why: "25 minutes focused, 5 minutes break. It's stupidly simple and stupidly effective. Works for studying, writing, cleaning — anything you've been avoiding.",
+      price: "Free",
+      store: "App Store or any timer",
+      image: "https://images.unsplash.com/photo-1513081563660-5fc8205c8679?w=900&q=85&auto=format&fit=crop",
+      next: "Pick one task you've been avoiding and run one Pomodoro right now."
+    }
+  };
+
+  function pickMock(query) {
+    const q = query.toLowerCase();
+    if (q.match(/gift|dad|mom|present|birthday/)) return MOCK.gift;
+    if (q.match(/bored|fun|hobby|weekend/)) return MOCK.bored;
+    if (q.match(/work|desk|office|wfh|home/)) return MOCK.work;
+    if (q.match(/travel|trip|bag|luggage|backpack/)) return MOCK.travel;
+    return MOCK.default;
+  }
+
+  // ===== Navigation =====
+  function go(screen) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + screen).classList.add('active');
+    window.scrollTo(0, 0);
+    updateUsageDisplay();
+  }
+
+  // ===== Lock =====
+  function unlock() {
+    const input = document.getElementById('pw-input');
+    const err = document.getElementById('pw-error');
+    if (input.value === 'exactly123') {
+      sessionStorage.setItem('exactly_unlocked', '1');
+      go('home');
+    } else {
+      err.textContent = 'Incorrect password';
+      input.value = '';
+      input.focus();
+    }
+  }
+  document.getElementById('pw-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') unlock();
+  });
+
+  // Auto-unlock if already authed this session
+  if (sessionStorage.getItem('exactly_unlocked') === '1') {
+    go('home');
+  }
+
+  // ===== Query flow =====
+  function submitQuery() {
+    const q = document.getElementById('query-input').value.trim();
+    const err = document.getElementById('home-error');
+    err.style.display = 'none';
+
+    if (!q) {
+      err.textContent = 'Type what you need first.';
+      err.style.display = 'block';
+      return;
+    }
+    if (STATE.dailyUsage >= STATE.limit) {
+      go('limit');
+      return;
+    }
+
+    document.getElementById('thinking-query').textContent = `Finding the perfect recommendation for "${q}"`;
+    go('thinking');
+
+    setTimeout(() => {
+      const rec = pickMock(q);
+      STATE.dailyUsage++;
+      renderResult(rec);
+      go('result');
+    }, 1800);
+  }
+
+  function renderResult(rec) {
+    document.getElementById('result-image').src = rec.image;
+    document.getElementById('result-highlight').textContent = rec.highlight;
+    document.getElementById('result-tail').textContent = rec.tail;
+    document.getElementById('result-why').textContent = rec.why;
+    document.getElementById('result-price').textContent = rec.price;
+    document.getElementById('result-store').textContent = rec.store;
+    document.getElementById('result-next').textContent = rec.next;
+  }
+
+  function askAnother() {
+    document.getElementById('query-input').value = '';
+    go('home');
+  }
+
+  function updateUsageDisplay() {
+    const left = Math.max(0, STATE.limit - STATE.dailyUsage);
+    const pct = (STATE.dailyUsage / STATE.limit) * 100;
+    document.getElementById('usage-text').textContent =
+      left === 0 ? 'Daily limit reached' : `${left} ${left === 1 ? 'query' : 'queries'} left today`;
+    document.getElementById('usage-bar').style.width = pct + '%';
+    document.getElementById('account-usage').textContent = `${STATE.dailyUsage} of ${STATE.limit} free queries used today`;
+    document.getElementById('account-bar').style.width = pct + '%';
+  }
+</script>
+</body>
+</html>
