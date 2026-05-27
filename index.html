@@ -352,7 +352,7 @@
       <div class="muted mb-16">Resets at midnight</div>
       <div class="meter mb-16" style="width:100%;"><div id="account-bar" style="width: 0%;"></div></div>
       <div style="padding-top: 16px; border-top: 1px solid var(--border-soft);">
-        <p style="font-size: 13px; color: var(--text-soft); margin-bottom: 12px;">
+        <p id="account-plan-copy" style="font-size: 13px; color: var(--text-soft); margin-bottom: 12px;">
           You're on the <b>Free</b> plan. Upgrade for unlimited queries.
         </p>
         <button class="btn" onclick="go('payment')">Upgrade to Pro · $4.99/mo</button>
@@ -487,14 +487,19 @@
   }
 
   function updateProDisplay() {
-    // Swap the upgrade button on the account screen for a "Pro ✓" badge
+    if (!STATE.isPro) return;
+    // Update the upgrade button → Pro badge
     const upgradeBtn = document.querySelector('#screen-account .btn');
-    if (!upgradeBtn) return;
-    if (STATE.isPro) {
+    if (upgradeBtn) {
       upgradeBtn.textContent = 'You\'re on Pro ✓';
       upgradeBtn.disabled = true;
       upgradeBtn.style.opacity = '0.6';
       upgradeBtn.onclick = null;
+    }
+    // Update the plan copy → reflect Pro state
+    const planCopy = document.getElementById('account-plan-copy');
+    if (planCopy) {
+      planCopy.innerHTML = "You're on the <b>Pro</b> plan. Unlimited queries forever.";
     }
   }
 
