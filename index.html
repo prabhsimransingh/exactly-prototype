@@ -6,7 +6,7 @@
 <title>Exactly — Prototype</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #FAF8F5;
@@ -37,34 +37,37 @@
   .between { justify-content: space-between; align-items: center; }
   .center { justify-content: center; align-items: center; }
   .col { flex-direction: column; }
-  .gap-12 { gap: 12px; }
-  .gap-8 { gap: 8px; }
   .mt-24 { margin-top: 24px; }
   .mb-24 { margin-bottom: 24px; }
   .mb-16 { margin-bottom: 16px; }
   .mb-8 { margin-bottom: 8px; }
   .mb-4 { margin-bottom: 4px; }
 
-  h1.title { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
-  h2.heading { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 700; line-height: 1.2; letter-spacing: -0.5px; }
+  h1.title { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 600; }
   .muted { color: var(--muted); font-size: 13px; }
   .label { font-size: 13px; color: var(--muted); }
 
   /* Avatar */
   .avatar {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: var(--accent); color: white;
+    padding: 6px 12px; border-radius: 12px;
+    background: var(--surface); color: var(--text);
     display: flex; align-items: center; justify-content: center;
-    font-family: 'Fraunces', serif; font-weight: 600; font-size: 16px;
-    cursor: pointer; border: none;
+    font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 11px;
+    cursor: pointer; border: 1px solid var(--border);
+    text-transform: uppercase; letter-spacing: 0.3px;
   }
-  .avatar.lg { width: 56px; height: 56px; font-size: 22px; }
+  .avatar.circle {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--accent); color: white;
+    font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600;
+    padding: 0;
+  }
 
   /* Card */
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
 
-  /* Input */
-  textarea, input[type=password], input[type=text] {
+  /* Inputs (password/text only — not the main query input) */
+  input[type=password], input[type=text] {
     width: 100%; padding: 14px 16px;
     border: 1px solid var(--border);
     border-radius: 14px;
@@ -72,8 +75,7 @@
     font-family: inherit; font-size: 15px; color: var(--text);
     outline: none; resize: none;
   }
-  textarea { min-height: 100px; }
-  textarea:focus, input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,98,42,0.08); }
+  input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,98,42,0.08); }
 
   /* Button */
   .btn {
@@ -90,31 +92,32 @@
   /* Usage strip */
   .usage-strip {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 10px 14px;
-    display: flex; align-items: center; justify-content: space-between;
-    font-size: 13px;
+    border-radius: 14px; padding: 14px;
+    margin-bottom: 24px;
   }
-  .meter { width: 80px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .usage-strip-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .meter { width: 100%; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
   .meter > div { height: 100%; background: var(--accent); transition: width .3s; }
 
+  /* Pro strip */
+  .pro-strip {
+    background: rgba(232,98,42,0.1); border: 1px solid rgba(232,98,42,0.25);
+    border-radius: 14px; padding: 14px; margin-bottom: 24px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; font-weight: 600; color: var(--accent);
+  }
+
   /* Thinking dots */
-  .dots { display: inline-flex; gap: 6px; }
+  .dots { display: inline-flex; gap: 8px; }
   .dots span {
-    width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+    width: 10px; height: 10px; border-radius: 50%; background: var(--accent);
     animation: pulse 1.4s ease-in-out infinite;
   }
   .dots span:nth-child(2) { animation-delay: 0.2s; }
   .dots span:nth-child(3) { animation-delay: 0.4s; }
   @keyframes pulse { 0%,80%,100% { opacity: 0.3; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1); } }
 
-  /* Result */
-  .result-image { width: 100%; height: 260px; border-radius: 16px; object-fit: cover; background: var(--border); }
-  .highlight { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
-  .tail { font-size: 17px; color: var(--text); line-height: 1.4; margin-bottom: 16px; }
-  .why { font-size: 14px; color: var(--text-soft); line-height: 1.55; margin-bottom: 16px; }
-  .price-row { padding-top: 14px; margin-bottom: 16px; border-top: 1px solid var(--border-soft); }
-  .price { font-size: 18px; font-weight: 600; }
-  .next-step { background: var(--bg); border-radius: 12px; padding: 12px; font-size: 13px; color: var(--text); line-height: 1.5; }
+  /* Back button */
   .back-btn { background: none; border: none; font-family: inherit; font-size: 15px; color: var(--text); cursor: pointer; padding: 8px 0; }
 
   /* Password screen */
@@ -127,7 +130,61 @@
   /* Banner */
   .demo-banner { background: #FFF3E0; border-bottom: 1px solid #FFD8A8; padding: 8px 16px; text-align: center; font-size: 12px; color: #B85C00; }
 
-  /* ── NEW: Smart Chips ─────────────────────────────── */
+  /* ── Claude-style input box ───────────────────────── */
+  .input-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 16px 18px 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: border-color .15s;
+    margin-bottom: 16px;
+  }
+  .input-card.focused { border-color: var(--accent); }
+  .input-card textarea {
+    width: 100%; border: none; background: transparent;
+    font-family: 'DM Sans', sans-serif; font-size: 16px;
+    color: var(--text); outline: none; resize: none;
+    min-height: 52px; max-height: 140px;
+    line-height: 1.5;
+  }
+  .input-card textarea::placeholder { color: var(--muted); }
+  .input-card-footer { display: flex; justify-content: flex-end; margin-top: 8px; }
+  .arrow-btn {
+    width: 40px; height: 40px; border-radius: 12px;
+    background: var(--text); border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: opacity .15s;
+    font-size: 18px; color: white;
+  }
+  .arrow-btn:disabled { background: var(--border); cursor: not-allowed; }
+  .arrow-btn:not(:disabled):hover { opacity: 0.85; }
+
+  /* ── Quick category cards ─────────────────────────── */
+  .cat-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; margin-bottom: 28px;
+  }
+  .cat-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 14px;
+    cursor: pointer; transition: border-color .15s;
+  }
+  .cat-card:hover { border-color: var(--accent); }
+  .cat-card-label { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .cat-card-hint { font-size: 11.5px; color: var(--muted); }
+
+  /* ── Home headline ────────────────────────────────── */
+  .home-headline {
+    font-family: 'Fraunces', serif; font-size: 58px; font-weight: 400;
+    line-height: 0.92; margin-bottom: 14px; color: var(--text);
+  }
+  .home-subtext {
+    font-family: 'Fraunces', serif; font-size: 17px; font-style: italic;
+    color: var(--text-soft); line-height: 1.4; margin-bottom: 28px;
+  }
+
+  /* ── Smart Chips ──────────────────────────────────── */
   .chips-section { margin-bottom: 16px; display: none; }
   .chips-section.visible { display: block; }
   .chips-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 600; }
@@ -142,38 +199,71 @@
   .chip.selected { border-color: var(--accent); background: rgba(232,98,42,0.08); color: var(--accent); }
   .chip.selected-blue { border-color: var(--blue); background: rgba(37,99,235,0.08); color: var(--blue); }
 
-  /* ── NEW: Oracle Score Widget ─────────────────────── */
+  /* ── Oracle Score Widget ──────────────────────────── */
   .oracle-widget {
     display: flex; align-items: center; gap: 12px;
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 14px; padding: 14px 16px; margin-bottom: 16px;
   }
   .oracle-ring {
-    width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
-    background: rgba(232,98,42,0.1); border: 2px solid rgba(232,98,42,0.3);
+    width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+    background: rgba(232,98,42,0.1); border: 1.5px solid rgba(232,98,42,0.4);
     display: flex; align-items: center; justify-content: center;
-    font-size: 14px; font-weight: 700; color: var(--accent);
+    font-size: 13px; font-weight: 700; color: var(--accent);
     font-family: 'DM Sans', sans-serif;
   }
-  .oracle-ring.high { background: rgba(5,150,105,0.1); border-color: rgba(5,150,105,0.3); color: var(--green); }
+  .oracle-ring.high { background: rgba(5,150,105,0.1); border-color: rgba(5,150,105,0.4); color: var(--green); }
 
-  /* ── NEW: Confidence badge ────────────────────────── */
-  .confidence-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 0; border-bottom: 1px solid var(--border-soft);
+  /* ── Result: editorial layout ─────────────────────── */
+  .result-screen-inner { padding: 0 0 120px; }
+  .result-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 0; margin-bottom: 24px;
+    border-bottom: 1px solid var(--border-soft);
   }
-  .confidence-badge {
-    font-size: 13px; font-weight: 600; padding: 3px 10px;
-    border-radius: 20px;
+  .result-ref { font-size: 10px; color: var(--muted); font-family: monospace; text-transform: uppercase; }
+  .result-asked { font-size: 13px; font-style: italic; color: var(--muted); margin-bottom: 24px; }
+  .result-image-wrap { display: flex; justify-content: center; margin-bottom: 24px; }
+  .result-image {
+    width: 75%; aspect-ratio: 4/5; border-radius: 4px;
+    object-fit: cover; background: var(--border-soft);
+    display: block;
   }
-  .confidence-badge.high { background: rgba(5,150,105,0.12); color: var(--green); }
-  .confidence-badge.mid  { background: rgba(232,98,42,0.12); color: var(--accent); }
-
-  /* ── NEW: Feedback row ────────────────────────────── */
+  .result-name {
+    font-family: 'Fraunces', serif; font-size: 52px; font-weight: 400;
+    font-style: italic; color: var(--accent); line-height: 0.92;
+    text-align: center; margin-bottom: 10px;
+  }
+  .result-tail {
+    font-family: 'Fraunces', serif; font-size: 18px; font-style: italic;
+    color: var(--text-soft); text-align: center; margin-bottom: 24px;
+    line-height: 1.4;
+  }
+  /* Stats table */
+  .stats-table {
+    border-top: 1px solid var(--text); border-bottom: 1px solid var(--text);
+    padding: 18px 0; margin-bottom: 24px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .stat-row {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px;
+  }
+  .stat-row:not(:last-child) { padding-bottom: 10px; border-bottom: 1px solid var(--border-soft); }
+  .stat-label { font-family: monospace; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.2px; }
+  .stat-value { font-size: 13px; font-weight: 500; color: var(--text); font-family: monospace; }
+  .stat-value.accent { color: var(--accent); }
+  .stat-value.green { color: var(--green); }
+  /* Why */
+  .why-label { font-family: monospace; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.2px; margin-bottom: 12px; }
+  .why-text {
+    font-family: 'Fraunces', serif; font-size: 20px; font-weight: 400;
+    color: var(--text); line-height: 1.35; margin-bottom: 24px;
+  }
+  /* Feedback row */
   .feedback-row {
     display: flex; align-items: center; justify-content: space-between;
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 14px; padding: 12px 16px; margin-bottom: 12px;
+    border-radius: 14px; padding: 14px; margin-bottom: 12px;
   }
   .feedback-row .fb-label { font-size: 13px; color: var(--muted); }
   .feedback-btns { display: flex; gap: 8px; }
@@ -186,8 +276,46 @@
   .fb-btn:hover { transform: scale(1.1); }
   .fb-btn.up   { border-color: rgba(5,150,105,0.4); background: rgba(5,150,105,0.08); }
   .fb-btn.down { border-color: rgba(193,60,42,0.4); background: rgba(193,60,42,0.08); }
+  /* Alt card */
+  .alt-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 18px; margin-bottom: 12px;
+  }
+  .alt-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .alt-card-name { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; color: var(--text); }
+  .alt-card-price { font-family: monospace; font-size: 14px; font-weight: 500; color: var(--text); }
+  .alt-card-blurb { font-size: 14px; color: var(--text-soft); line-height: 1.4; }
+  /* Next step card */
+  .next-card {
+    background: rgba(37,99,235,0.06); border: 1px solid rgba(37,99,235,0.15);
+    border-radius: 16px; padding: 18px; margin-bottom: 12px;
+  }
+  .next-card-label { font-family: monospace; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--blue); letter-spacing: 0.2px; margin-bottom: 10px; }
+  .next-card-text { font-size: 15px; color: var(--text); line-height: 1.5; }
+  /* Sticky result CTAs */
+  .result-ctas {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 480px; padding: 12px 24px 28px;
+    background: linear-gradient(to top, var(--bg) 70%, transparent);
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .get-it-now {
+    width: 100%; padding: 18px 16px;
+    background: var(--text); color: white;
+    border: none; border-radius: 14px; border-left: 3px solid var(--accent);
+    font-family: inherit; font-size: 17px; font-weight: 600;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+  }
+  .get-it-now span.sub { font-size: 12px; color: rgba(255,255,255,0.55); font-weight: 400; font-family: 'DM Sans', sans-serif; }
+  .ask-another-btn {
+    width: 100%; padding: 13px;
+    background: transparent; color: var(--text);
+    border: 1px solid var(--border); border-radius: 14px;
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    cursor: pointer;
+  }
 
-  /* ── NEW: Follow-up screen ────────────────────────── */
+  /* ── Follow-up screen ─────────────────────────────── */
   .followup-option {
     display: flex; align-items: center; justify-content: space-between;
     background: var(--surface); border: 1.5px solid var(--border);
@@ -197,15 +325,13 @@
   }
   .followup-option:hover { border-color: var(--accent); }
 
-  /* ── NEW: Decision Vault ──────────────────────────── */
-  .vault-entry {
-    padding: 12px 0; border-bottom: 1px solid var(--border-soft);
-  }
+  /* ── Decision Vault ───────────────────────────────── */
+  .vault-entry { padding: 12px 0; border-bottom: 1px solid var(--border-soft); }
   .vault-entry:last-child { border-bottom: none; }
   .vault-highlight { font-family: 'Fraunces', serif; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
   .vault-meta { font-size: 12px; color: var(--muted); }
 
-  /* ── NEW: Oracle account card ─────────────────────── */
+  /* ── Oracle account card ──────────────────────────── */
   .oracle-card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 16px; padding: 20px; margin-bottom: 16px;
@@ -270,33 +396,46 @@
   </section>
 
   <!-- HOME -->
-  <section class="screen" id="screen-home">
+  <section class="screen" id="screen-home" style="padding: 0;">
     <div class="demo-banner">Prototype mode — recommendations are mocked</div>
-    <div style="padding: 16px 24px 24px;">
+    <div style="padding: 16px 24px 120px;">
 
-      <div class="flex between mb-24" style="margin-top: 8px;">
-        <h1 class="serif title">Exactly.</h1>
-        <button class="avatar" onclick="go('account')">T</button>
+      <!-- Header -->
+      <div style="display:flex; justify-content:space-between; align-items:center; padding: 14px 0; margin-bottom: 24px; border-bottom: 1px solid var(--border-soft);">
+        <h1 class="title serif">Exactly<span style="color:var(--accent);">.</span></h1>
+        <button class="avatar" onclick="go('account')">Account</button>
       </div>
 
       <!-- Oracle Score Widget (hidden until 3+ ratings) -->
       <div class="oracle-widget" id="oracle-widget" style="display:none;">
         <div class="oracle-ring" id="oracle-ring-home">0%</div>
-        <div>
+        <div style="flex:1;">
           <div style="font-size:14px; font-weight:600; color: var(--text);">🔮 Oracle Accuracy</div>
           <div class="muted" id="oracle-tier-home" style="margin-top: 2px;">Awaiting first pick</div>
         </div>
       </div>
 
-      <div class="usage-strip mb-24">
-        <span id="usage-text">3 queries left today</span>
-        <div class="meter"><div id="usage-bar" style="width: 0%;"></div></div>
+      <!-- Usage / Pro strip -->
+      <div id="usage-strip-wrap">
+        <!-- filled by updateUsageDisplay() -->
       </div>
 
-      <h2 class="heading mb-16">What do you need?</h2>
+      <!-- Headline -->
+      <div class="home-headline">
+        What's your<br/><span style="font-style:italic; color:var(--accent);">itch</span>?
+      </div>
+      <p class="home-subtext">Tell us what you need. We'll cure it exactly — with a pin-point pick.</p>
 
-      <textarea id="query-input" placeholder="Gift for my dad, I'm bored, need a desk lamp..." oninput="onQueryChange(this.value)"></textarea>
-      <div id="home-error" style="color:#c33; font-size:13px; margin: 8px 0; display:none;"></div>
+      <!-- Error -->
+      <div id="home-error" style="color:#c33; font-size:13px; margin-bottom: 12px; display:none;"></div>
+
+      <!-- Claude-style input -->
+      <div class="input-card" id="input-card">
+        <textarea id="query-input" placeholder="Tell me what you need…" oninput="onQueryChange(this.value)" onkeydown="onQueryKeydown(event)" rows="2"></textarea>
+        <div class="input-card-footer">
+          <button class="arrow-btn" id="submit-arrow" onclick="submitQuery()" disabled>→</button>
+        </div>
+      </div>
 
       <!-- Smart Chips -->
       <div class="chips-section" id="chips-section">
@@ -305,17 +444,32 @@
         <div class="chips-row" id="chips-extra" style="display:none;"></div>
       </div>
 
-      <button class="btn mt-24" onclick="submitQuery()">Get Recommendation</button>
-
-      <div class="muted" style="text-align:center; margin-top: 32px; font-size: 12px;">
-        Try: "gift for my dad" · "I'm bored" · "work from home"
+      <!-- Quick category cards -->
+      <div class="cat-grid">
+        <div class="cat-card" onclick="setQuery('gift for someone')">
+          <div class="cat-card-label">Gift</div>
+          <div class="cat-card-hint">for someone</div>
+        </div>
+        <div class="cat-card" onclick="setQuery('I am bored')">
+          <div class="cat-card-label">Boredom</div>
+          <div class="cat-card-hint">entertain me</div>
+        </div>
+        <div class="cat-card" onclick="setQuery('wellness')">
+          <div class="cat-card-label">Wellness</div>
+          <div class="cat-card-hint">feel better</div>
+        </div>
+        <div class="cat-card" onclick="setQuery('work from home setup')">
+          <div class="cat-card-label">Product</div>
+          <div class="cat-card-hint">find a match</div>
+        </div>
       </div>
+
     </div>
   </section>
 
   <!-- FOLLOW-UP QUESTION -->
   <section class="screen" id="screen-followup">
-    <div style="padding: 8px 24px 24px;">
+    <div style="padding: 8px 0 24px;">
       <button class="back-btn mb-24" onclick="go('home')">← Back</button>
       <div style="font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 16px;">
         One quick thing
@@ -328,56 +482,115 @@
   </section>
 
   <!-- THINKING -->
-  <section class="screen" id="screen-thinking">
+  <section class="screen" id="screen-thinking" style="padding:0;">
     <div class="lock-screen">
-      <p class="muted mb-16" style="text-align: center; padding: 0 24px;" id="thinking-query">Finding the perfect recommendation...</p>
-      <div class="dots"><span></span><span></span><span></span></div>
-      <p class="muted" style="margin-top: 16px; font-size: 12px;">~2 seconds</p>
+      <div style="position:absolute; top:24px; left:24px;">
+        <span class="serif" style="font-size:20px; font-weight:600;">Exactly<span style="color:var(--accent);">.</span></span>
+      </div>
+      <div style="text-align:center; padding: 0 24px;">
+        <p style="font-size:13px; font-style:italic; color:var(--muted); margin-bottom:20px;" id="thinking-query">"your query"</p>
+        <div class="dots" style="margin-bottom:20px;"><span></span><span></span><span></span></div>
+        <p class="serif" style="font-size:22px; font-weight:500; margin-bottom:12px;">Thinking it through…</p>
+        <p style="font-size:14px; color:var(--text-soft);">Matching your need to the perfect pick.</p>
+      </div>
     </div>
   </section>
 
   <!-- RESULT -->
-  <section class="screen" id="screen-result">
-    <button class="back-btn mb-16" onclick="askAnother()">← Back</button>
-    <img class="result-image mb-16" id="result-image" alt="" />
-    <div class="card mb-16">
-      <div class="highlight" id="result-highlight"></div>
-      <div class="tail" id="result-tail"></div>
-      <div class="why" id="result-why"></div>
+  <section class="screen" id="screen-result" style="padding: 24px 24px 0;">
+    <div class="result-screen-inner">
 
-      <!-- Confidence + stats -->
-      <div class="confidence-row">
-        <span class="label" style="text-transform:uppercase; letter-spacing:0.2px;">Match</span>
-        <span class="confidence-badge" id="confidence-badge">—</span>
+      <!-- Header row -->
+      <div class="result-header">
+        <button class="back-btn" onclick="askAnother()">← Back</button>
+        <span class="result-ref">№ 8247 · Exactly</span>
+        <span style="width:40px;"></span>
       </div>
-      <div class="price-row">
-        <div class="label mb-4">Price & Availability</div>
-        <div class="price mb-4" id="result-price"></div>
-        <div class="muted" id="result-store"></div>
+
+      <!-- "You asked for" -->
+      <p class="result-asked" id="result-asked">You asked for "<span id="result-query-ref"></span>"</p>
+
+      <!-- Image -->
+      <div class="result-image-wrap">
+        <img class="result-image" id="result-image" alt="" onerror="this.src='https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&q=80'" />
       </div>
-      <div class="next-step">
-        <div class="label mb-4">Next Step</div>
-        <div id="result-next"></div>
+
+      <!-- Product name (big italic) -->
+      <p class="result-name" id="result-highlight"></p>
+      <p class="result-tail" id="result-tail"></p>
+
+      <!-- Stats table -->
+      <div class="stats-table">
+        <div class="stat-row">
+          <span class="stat-label">Price</span>
+          <span class="stat-value" id="stat-price"></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Source</span>
+          <span class="stat-value" id="stat-store"></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">For</span>
+          <span class="stat-value">You, exactly</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Match</span>
+          <span class="stat-value" id="stat-match"></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Verdict</span>
+          <span class="stat-value accent">Hand-picked</span>
+        </div>
       </div>
+
+      <!-- Why this one -->
+      <div class="why-label">Why this one</div>
+      <div class="why-text" id="result-why"></div>
+
+      <!-- 👍 / 👎 Feedback -->
+      <div class="feedback-row" id="feedback-row">
+        <span class="fb-label" id="fb-label">Was this exactly right?</span>
+        <div class="feedback-btns" id="feedback-btns">
+          <button class="fb-btn up" onclick="giveFeedback('up')">👍</button>
+          <button class="fb-btn down" onclick="giveFeedback('down')">👎</button>
+        </div>
+      </div>
+
+      <!-- Alternative -->
+      <div class="alt-card">
+        <div style="font-family:monospace; font-size:10px; font-weight:700; text-transform:uppercase; color:var(--muted); letter-spacing:0.2px; margin-bottom:10px;">If you want to spend less</div>
+        <div class="alt-card-header">
+          <span class="alt-card-name" id="alt-name"></span>
+          <span class="alt-card-price" id="alt-price"></span>
+        </div>
+        <p class="alt-card-blurb" id="alt-blurb"></p>
+      </div>
+
+      <!-- Next step -->
+      <div class="next-card">
+        <div class="next-card-label">What to do next</div>
+        <p class="next-card-text" id="result-next"></p>
+      </div>
+
     </div>
 
-    <!-- 👍 / 👎 Feedback -->
-    <div class="feedback-row" id="feedback-row">
-      <span class="fb-label" id="fb-label">Was this exactly right?</span>
-      <div class="feedback-btns" id="feedback-btns">
-        <button class="fb-btn up" onclick="giveFeedback('up')">👍</button>
-        <button class="fb-btn down" onclick="giveFeedback('down')">👎</button>
-      </div>
+    <!-- Sticky CTAs -->
+    <div class="result-ctas">
+      <button class="get-it-now" id="get-it-now-btn" onclick="getItNow()">
+        <div>
+          <div>Get It Now</div>
+          <div class="sub" id="get-it-now-store">via Amazon</div>
+        </div>
+        <span style="font-size:20px;">→</span>
+      </button>
+      <button class="ask-another-btn" onclick="askAnother()">Ask Another</button>
     </div>
-
-    <button class="btn mb-8" onclick="alert('In production, this opens the store link.')">Get It Now</button>
-    <button class="btn secondary" onclick="askAnother()">Ask Another</button>
   </section>
 
   <!-- USAGE LIMIT -->
   <section class="screen" id="screen-limit">
     <div class="lock-screen">
-      <h2 class="heading mb-16" style="text-align:center;">Daily limit reached</h2>
+      <h2 class="serif" style="font-size:32px; font-weight:700; margin-bottom:16px; text-align:center;">Daily limit reached</h2>
       <p class="muted mb-24" style="text-align:center; max-width: 320px;">You've used all 3 free queries for today. Resets at midnight, or upgrade for unlimited.</p>
       <div style="width: 100%; max-width: 320px;">
         <button class="btn mb-8" onclick="go('payment')">Upgrade to Pro · $4.99/mo</button>
@@ -388,7 +601,7 @@
 
   <!-- PAYMENT -->
   <section class="screen" id="screen-payment">
-    <div style="padding: 8px 24px 24px;">
+    <div>
       <div style="padding: 14px 0 14px; margin-bottom: 24px; border-bottom: 1px solid var(--border-soft);">
         <h1 class="serif" style="font-size: 20px; font-weight: 600;">Upgrade to Pro</h1>
       </div>
@@ -421,17 +634,17 @@
   <!-- ACCOUNT -->
   <section class="screen" id="screen-account">
     <button class="back-btn mb-16" onclick="go('home')">← Back</button>
-    <h1 class="serif title mb-24" style="text-align:center;">Account</h1>
+    <h1 class="serif" style="font-size:28px; font-weight:700; text-align:center; margin-bottom:24px;">Account</h1>
 
-    <div class="flex" style="gap:14px; margin-bottom: 28px; align-items:center;">
-      <div class="avatar lg">T</div>
+    <div style="display:flex; gap:14px; margin-bottom: 28px; align-items:center;">
+      <div class="avatar circle">T</div>
       <div>
         <div class="serif" style="font-size:20px; font-weight:600;">Test User</div>
         <div class="muted">test@exactly.app</div>
       </div>
     </div>
 
-    <!-- Oracle Score Card (in account) -->
+    <!-- Oracle Score Card -->
     <div class="oracle-card" id="oracle-account-card" style="display:none;">
       <div style="font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.2px; margin-bottom: 14px; font-family: monospace;">Your Oracle</div>
       <div class="oracle-card-inner">
@@ -445,14 +658,16 @@
 
     <!-- Plan card -->
     <div class="card mb-16">
-      <div style="font-weight:600; margin-bottom: 8px;" id="account-usage">3 of 3 free queries used today</div>
+      <div style="font-weight:600; margin-bottom: 8px;" id="account-usage">0 of 3 free queries used today</div>
       <div class="muted mb-16">Resets at midnight</div>
-      <div class="meter mb-16" style="width:100%;"><div id="account-bar" style="width: 0%;"></div></div>
+      <div style="width:100%; height:6px; background:var(--border); border-radius:3px; overflow:hidden; margin-bottom:16px;">
+        <div id="account-bar" style="width:0%; height:100%; background:var(--accent); transition:width .3s;"></div>
+      </div>
       <div style="padding-top: 16px; border-top: 1px solid var(--border-soft);">
         <p id="account-plan-copy" style="font-size: 13px; color: var(--text-soft); margin-bottom: 12px;">
           You're on the <b>Free</b> plan. Upgrade for unlimited queries.
         </p>
-        <button class="btn" onclick="go('payment')">Upgrade to Pro · $4.99/mo</button>
+        <button class="btn" id="upgrade-btn" onclick="go('payment')">Upgrade to Pro · $4.99/mo</button>
       </div>
     </div>
 
@@ -464,11 +679,12 @@
     </div>
 
     <div class="card">
-      <div style="padding: 4px 0;">Saved recommendations</div>
-      <div style="padding: 12px 0 4px; border-top: 1px solid var(--border-soft); margin-top: 12px;">Sign out</div>
+      <div style="padding: 4px 0; color:var(--muted);">Saved recommendations — coming soon</div>
+      <div style="padding: 12px 0 4px; border-top: 1px solid var(--border-soft); margin-top: 12px; cursor:pointer; color:var(--text);" onclick="signOut()">Sign out</div>
     </div>
     <p class="muted" style="text-align:center; margin-top: 24px; font-size: 11px;">Prototype — actions are simulated</p>
   </section>
+
 </div>
 
 <script>
@@ -479,11 +695,12 @@
     isPro: false,
     oracleUps: 0,
     oracleTotal: 0,
-    vault: [],           // { highlight, price, query }
+    vault: [],
     selectedBudget: null,
     selectedExtra: null,
     currentQuery: '',
     feedbackGiven: false,
+    currentRec: null,
   };
 
   // ===== Mock recommendations =====
@@ -493,20 +710,22 @@
       tail: "with a bag of single-origin beans from a local roaster.",
       why: "It's the gift that becomes a daily ritual. Pour-over coffee is meditative, the V60 is iconic, and pairing it with great beans makes it instantly useful. Better than another tie.",
       price: "$28 + $18 beans",
-      store: "Blue Bottle, local roasters, or Amazon",
+      store: "Blue Bottle or Amazon",
       confidence: 88,
       image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&q=85&auto=format&fit=crop",
-      next: "Pick a medium-roast bean and write a short note explaining the ritual."
+      next: "Pick a medium-roast bean and write a short note explaining the ritual.",
+      alt: { name: "Aeropress Go", price: "$36", blurb: "More compact, easier cleanup, same great coffee — great if they travel." }
     },
     bored: {
       highlight: "Learn to play guitar",
       tail: "starting with JustinGuitar's free beginner course.",
       why: "It's tactile, lifelong, and immediately rewarding. Within two weeks you'll play recognizable songs. Cheaper than therapy, more fun than scrolling.",
       price: "$80 used acoustic",
-      store: "Facebook Marketplace or Guitar Center",
+      store: "Facebook Marketplace",
       confidence: 74,
       image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=900&q=85&auto=format&fit=crop",
-      next: "Buy a used guitar today and finish Lesson 1 tonight."
+      next: "Buy a used guitar today and finish Lesson 1 tonight.",
+      alt: { name: "Ukulele", price: "$50", blurb: "4 strings, smaller, cheaper — you'll learn your first song in a day." }
     },
     work: {
       highlight: "A BenQ ScreenBar",
@@ -516,7 +735,8 @@
       store: "BenQ direct or Amazon",
       confidence: 91,
       image: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=900&q=85&auto=format&fit=crop",
-      next: "Order today, set it up tomorrow morning before your first call."
+      next: "Order today, set it up tomorrow morning before your first call.",
+      alt: { name: "Elgato Key Light Mini", price: "$80", blurb: "App-controlled, free-standing — better for video calls if that's your priority." }
     },
     travel: {
       highlight: "The Tom Bihn Synik 22",
@@ -526,7 +746,8 @@
       store: "tombihn.com",
       confidence: 85,
       image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=900&q=85&auto=format&fit=crop",
-      next: "Order the Aubergine or Black colorway — both age beautifully."
+      next: "Order the Aubergine or Black colorway — both age beautifully.",
+      alt: { name: "Osprey Farpoint 40", price: "$160", blurb: "More pockets, half the price, still fits overhead — solid if budget matters." }
     },
     default: {
       highlight: "Try the Pomodoro technique",
@@ -536,11 +757,12 @@
       store: "App Store or any timer",
       confidence: 67,
       image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=85&auto=format&fit=crop",
-      next: "Pick one task you've been avoiding and run one Pomodoro right now."
+      next: "Pick one task you've been avoiding and run one Pomodoro right now.",
+      alt: { name: "Time Timer", price: "$35", blurb: "Physical visual timer — if your phone is the distraction, this is the fix." }
     }
   };
 
-  // Ambiguous queries that should show a follow-up
+  // Ambiguous queries → follow-up
   const FOLLOWUP_MAP = {
     'something nice':   { question: 'What kind of something?', options: ['A physical gift', 'An experience', 'For myself'] },
     'a gift':           { question: 'Who is this gift for?',    options: ['Him', 'Her', 'A kid', 'Anyone works'] },
@@ -558,7 +780,7 @@
     return MOCK.default;
   }
 
-  // ===== Smart Chips config =====
+  // ===== Smart Chips =====
   const CHIP_MAP = {
     audio:   { keywords: ['headphone','earphone','speaker','earbud','audio','music'], budgets: ['Under $50','$50–$150','$150+'] },
     kitchen: { keywords: ['kitchen','cook','bake','pan','knife','chef','food'], budgets: ['Under $30','$30–$100','$100+'] },
@@ -575,10 +797,28 @@
     return null;
   }
 
+  function setQuery(val) {
+    const ta = document.getElementById('query-input');
+    ta.value = val;
+    onQueryChange(val);
+    ta.focus();
+  }
+
   function onQueryChange(val) {
     STATE.currentQuery = val;
     STATE.selectedBudget = null;
     STATE.selectedExtra = null;
+
+    // Arrow button active state
+    const arrow = document.getElementById('submit-arrow');
+    const card = document.getElementById('input-card');
+    if (val.trim()) {
+      arrow.disabled = false;
+      card.classList.add('focused');
+    } else {
+      arrow.disabled = true;
+      card.classList.remove('focused');
+    }
 
     const cat = val.trim().split(/\s+/).length >= 2 ? detectCategory(val) : null;
     const section = document.getElementById('chips-section');
@@ -588,11 +828,9 @@
     if (cat) {
       section.classList.add('visible');
       const { budgets, extra } = CHIP_MAP[cat];
-
       budgetRow.innerHTML = budgets.map(b =>
         `<button class="chip" onclick="selectChip('budget','${b}',this)">${b}</button>`
       ).join('');
-
       if (extra) {
         extraRow.style.display = 'flex';
         extraRow.innerHTML = extra.chips.map(c =>
@@ -607,11 +845,13 @@
     }
   }
 
+  function onQueryKeydown(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitQuery(); }
+  }
+
   function selectChip(type, val, el) {
     const row = type === 'budget' ? document.getElementById('chips-budget') : document.getElementById('chips-extra');
-    row.querySelectorAll('.chip').forEach(c => {
-      c.classList.remove('selected', 'selected-blue');
-    });
+    row.querySelectorAll('.chip').forEach(c => c.classList.remove('selected', 'selected-blue'));
     if (type === 'budget') { el.classList.add('selected'); STATE.selectedBudget = val; }
     else { el.classList.add('selected-blue'); STATE.selectedExtra = val; }
   }
@@ -624,7 +864,7 @@
     updateUsageDisplay();
   }
 
-  // ===== Lock =====
+  // ===== Lock / Auth =====
   function unlock() {
     const input = document.getElementById('pw-input');
     const err = document.getElementById('pw-error');
@@ -642,6 +882,11 @@
   function signIn() {
     sessionStorage.setItem('exactly_signed_in', '1');
     go('home');
+  }
+
+  function signOut() {
+    sessionStorage.removeItem('exactly_signed_in');
+    go('login');
   }
 
   if (sessionStorage.getItem('exactly_unlocked') === '1') {
@@ -663,7 +908,7 @@
 
   function updateProDisplay() {
     if (!STATE.isPro) return;
-    const upgradeBtn = document.querySelector('#screen-account .btn');
+    const upgradeBtn = document.getElementById('upgrade-btn');
     if (upgradeBtn) { upgradeBtn.textContent = "You're on Pro ✓"; upgradeBtn.disabled = true; upgradeBtn.style.opacity = '0.6'; upgradeBtn.onclick = null; }
     const planCopy = document.getElementById('account-plan-copy');
     if (planCopy) planCopy.innerHTML = "You're on the <b>Pro</b> plan. Unlimited queries forever.";
@@ -690,18 +935,18 @@
   }
 
   function runThinking(q) {
-    // Build enriched query context from chips
     let context = q;
     if (STATE.selectedBudget) context += `. Budget: ${STATE.selectedBudget}`;
     if (STATE.selectedExtra) context += `. For: ${STATE.selectedExtra}`;
 
-    document.getElementById('thinking-query').textContent = `Finding the perfect recommendation for "${q}"`;
+    document.getElementById('thinking-query').textContent = `"${q}"`;
     go('thinking');
 
     setTimeout(() => {
       const rec = pickMock(context);
       STATE.dailyUsage++;
       STATE.feedbackGiven = false;
+      STATE.currentRec = rec;
       STATE.vault.unshift({ highlight: rec.highlight, price: rec.price, query: q });
       renderResult(rec, q);
       go('result');
@@ -714,7 +959,7 @@
     document.getElementById('followup-question').textContent = followup.question;
     const container = document.getElementById('followup-options');
     container.innerHTML = followup.options.map(opt =>
-      `<div class="followup-option" onclick="answerFollowUp('${opt}','${originalQuery}')">
+      `<div class="followup-option" onclick="answerFollowUp('${opt}','${originalQuery.replace(/'/g,"\\'")}')">
         <span>${opt}</span><span style="color:var(--muted);">→</span>
       </div>`
     ).join('');
@@ -728,23 +973,41 @@
 
   // ===== Result =====
   function renderResult(rec, query) {
+    document.getElementById('result-query-ref').textContent = query;
     document.getElementById('result-image').src = rec.image;
     document.getElementById('result-highlight').textContent = rec.highlight;
     document.getElementById('result-tail').textContent = rec.tail;
-    document.getElementById('result-why').textContent = rec.why;
-    document.getElementById('result-price').textContent = rec.price;
-    document.getElementById('result-store').textContent = rec.store;
+    document.getElementById('result-why').textContent = rec.why.split('.')[0] + '.';
+    document.getElementById('stat-price').textContent = rec.price;
+    document.getElementById('stat-store').textContent = rec.store;
     document.getElementById('result-next').textContent = rec.next;
 
-    // Confidence badge
-    const badge = document.getElementById('confidence-badge');
+    // Match badge
     const conf = rec.confidence || 70;
-    badge.textContent = conf + '%';
-    badge.className = 'confidence-badge ' + (conf >= 80 ? 'high' : 'mid');
+    const matchEl = document.getElementById('stat-match');
+    matchEl.textContent = conf + '%';
+    matchEl.className = 'stat-value ' + (conf >= 80 ? 'green' : 'accent');
+
+    // Alt card
+    if (rec.alt) {
+      document.getElementById('alt-name').textContent = rec.alt.name;
+      document.getElementById('alt-price').textContent = rec.alt.price;
+      document.getElementById('alt-blurb').textContent = rec.alt.blurb;
+    }
+
+    // Get It Now store label
+    document.getElementById('get-it-now-store').textContent = 'via ' + rec.store;
 
     // Reset feedback
     document.getElementById('fb-label').textContent = 'Was this exactly right?';
     document.getElementById('feedback-btns').style.display = 'flex';
+  }
+
+  function getItNow() {
+    const rec = STATE.currentRec;
+    if (!rec) return;
+    const url = 'https://www.amazon.com/s?k=' + encodeURIComponent(rec.highlight);
+    window.open(url, '_blank');
   }
 
   // ===== 👍/👎 Feedback =====
@@ -778,14 +1041,12 @@
 
     // Home widget
     const widget = document.getElementById('oracle-widget');
-    const ringHome = document.getElementById('oracle-ring-home');
-    const tierHome = document.getElementById('oracle-tier-home');
-
     if (oracleTotal >= 3) {
       widget.style.display = 'flex';
+      const ringHome = document.getElementById('oracle-ring-home');
       ringHome.textContent = score + '%';
       ringHome.className = 'oracle-ring' + (isHigh ? ' high' : '');
-      tierHome.textContent = tier + ' · ' + oracleTotal + ' picks rated';
+      document.getElementById('oracle-tier-home').textContent = tier + ' · ' + oracleTotal + ' picks rated';
     }
 
     // Account card
@@ -802,10 +1063,8 @@
   // ===== Decision Vault =====
   function updateVaultDisplay() {
     if (STATE.vault.length === 0) return;
-    const card = document.getElementById('vault-card');
-    const list = document.getElementById('vault-list');
-    card.style.display = 'block';
-    list.innerHTML = STATE.vault.slice(0, 8).map(v =>
+    document.getElementById('vault-card').style.display = 'block';
+    document.getElementById('vault-list').innerHTML = STATE.vault.slice(0, 8).map(v =>
       `<div class="vault-entry">
         <div class="vault-highlight">${v.highlight}</div>
         <div class="vault-meta">${v.price} · "${v.query}"</div>
@@ -815,28 +1074,43 @@
 
   function askAnother() {
     document.getElementById('query-input').value = '';
+    document.getElementById('submit-arrow').disabled = true;
+    document.getElementById('input-card').classList.remove('focused');
     STATE.selectedBudget = null;
     STATE.selectedExtra = null;
     document.getElementById('chips-section').classList.remove('visible');
     go('home');
   }
 
+  // ===== Usage display =====
   function updateUsageDisplay() {
+    const wrap = document.getElementById('usage-strip-wrap');
+    if (!wrap) return;
+
     if (STATE.isPro) {
-      document.getElementById('usage-text').textContent = 'Pro · unlimited queries';
-      document.getElementById('usage-bar').style.width = '100%';
+      wrap.innerHTML = `<div class="pro-strip"><span style="font-size:16px;">✦</span> Pro — unlimited queries</div>`;
       document.getElementById('account-usage').textContent = `${STATE.dailyUsage} queries today · unlimited`;
       document.getElementById('account-bar').style.width = '100%';
       return;
     }
+
     const left = Math.max(0, STATE.limit - STATE.dailyUsage);
     const pct = (STATE.dailyUsage / STATE.limit) * 100;
-    document.getElementById('usage-text').textContent =
-      left === 0 ? 'Daily limit reached' : `${left} ${left === 1 ? 'query' : 'queries'} left today`;
-    document.getElementById('usage-bar').style.width = pct + '%';
+    const leftText = left === 0 ? 'Daily limit reached' : `${left} ${left === 1 ? 'query' : 'queries'} left today`;
+    wrap.innerHTML = `
+      <div class="usage-strip">
+        <div class="usage-strip-top">
+          <span style="font-size:13px; font-weight:600;">${leftText}</span>
+          <span style="font-size:11px; color:var(--muted);">Free plan</span>
+        </div>
+        <div class="meter"><div style="width:${pct}%; height:100%; background:var(--accent); transition:width .3s;"></div></div>
+      </div>`;
     document.getElementById('account-usage').textContent = `${STATE.dailyUsage} of ${STATE.limit} free queries used today`;
     document.getElementById('account-bar').style.width = pct + '%';
   }
+
+  // Init
+  updateUsageDisplay();
 </script>
 </body>
 </html>
