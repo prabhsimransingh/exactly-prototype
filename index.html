@@ -331,6 +331,37 @@
   .vault-highlight { font-family: 'Fraunces', serif; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
   .vault-meta { font-size: 12px; color: var(--muted); }
 
+  /* ── Onboarding ──────────────────────────────────── */
+  .ob-step { display: none; }
+  .ob-step.active { display: block; }
+  .ob-progress { display: flex; gap: 6px; margin-bottom: 32px; }
+  .ob-dot { height: 3px; flex: 1; border-radius: 2px; background: var(--border); transition: background .2s; }
+  .ob-dot.done { background: var(--accent); }
+  .ob-options { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 32px; }
+  .ob-option {
+    padding: 10px 18px; border-radius: 100px;
+    border: 1.5px solid var(--border); background: var(--surface);
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+    color: var(--text); cursor: pointer; transition: all .15s;
+  }
+  .ob-option:hover { border-color: var(--accent); }
+  .ob-option.selected { border-color: var(--accent); background: rgba(232,98,42,0.1); color: var(--accent); }
+  .ob-style-option {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 16px; padding: 18px 20px; margin-bottom: 10px;
+    cursor: pointer; transition: border-color .15s;
+  }
+  .ob-style-option:hover { border-color: var(--accent); }
+  .ob-style-option.selected { border-color: var(--accent); background: rgba(232,98,42,0.06); }
+  .ob-style-title { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .ob-style-desc { font-size: 13px; color: var(--muted); }
+  .personalized-tag {
+    display: inline-block; padding: 3px 10px; border-radius: 100px;
+    background: rgba(232,98,42,0.1); border: 1px solid rgba(232,98,42,0.25);
+    font-size: 11px; font-weight: 600; color: var(--accent);
+    margin-bottom: 16px; font-family: monospace; text-transform: uppercase; letter-spacing: 0.3px;
+  }
+
   /* ── Oracle account card ──────────────────────────── */
   .oracle-card {
     background: var(--surface); border: 1px solid var(--border);
@@ -393,6 +424,59 @@
         </p>
       </div>
     </div>
+  </section>
+
+  <!-- ONBOARDING -->
+  <section class="screen" id="screen-onboarding" style="padding: 32px 24px;">
+
+    <!-- Step 1: Categories -->
+    <div class="ob-step active" id="ob-step-1">
+      <div class="ob-progress">
+        <div class="ob-dot done" id="ob-dot-1"></div>
+        <div class="ob-dot" id="ob-dot-2"></div>
+      </div>
+      <p style="font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Step 1 of 2</p>
+      <h2 class="serif" style="font-size: 28px; font-weight: 500; line-height: 1.2; margin-bottom: 8px;">What do you usually<br/>shop for?</h2>
+      <p style="font-size: 14px; color: var(--muted); margin-bottom: 0;">Pick all that apply. We'll tailor picks to your world.</p>
+      <div class="ob-options" id="ob-categories">
+        <button class="ob-option" onclick="toggleCat(this,'Tech')">Tech</button>
+        <button class="ob-option" onclick="toggleCat(this,'Home')">Home</button>
+        <button class="ob-option" onclick="toggleCat(this,'Fashion')">Fashion</button>
+        <button class="ob-option" onclick="toggleCat(this,'Gifts')">Gifts</button>
+        <button class="ob-option" onclick="toggleCat(this,'Food')">Food</button>
+        <button class="ob-option" onclick="toggleCat(this,'Fitness')">Fitness</button>
+        <button class="ob-option" onclick="toggleCat(this,'Travel')">Travel</button>
+        <button class="ob-option" onclick="toggleCat(this,'Wellness')">Wellness</button>
+        <button class="ob-option" onclick="toggleCat(this,'Books')">Books</button>
+      </div>
+      <button class="btn" onclick="obNextStep()">Next →</button>
+      <button class="btn secondary" style="margin-top: 10px;" onclick="obSkip()">Skip for now</button>
+    </div>
+
+    <!-- Step 2: Style -->
+    <div class="ob-step" id="ob-step-2">
+      <div class="ob-progress">
+        <div class="ob-dot done"></div>
+        <div class="ob-dot done"></div>
+      </div>
+      <p style="font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Step 2 of 2</p>
+      <h2 class="serif" style="font-size: 28px; font-weight: 500; line-height: 1.2; margin-bottom: 8px;">How do you like<br/>to shop?</h2>
+      <p style="font-size: 14px; color: var(--muted); margin-bottom: 24px;">We'll match picks to your style.</p>
+      <div class="ob-style-option" onclick="selectStyle(this,'Best value')" id="style-value">
+        <div class="ob-style-title">Best value 💰</div>
+        <div class="ob-style-desc">Great quality without overpaying. Smart picks that punch above their price.</div>
+      </div>
+      <div class="ob-style-option" onclick="selectStyle(this,'Balanced')" id="style-balanced">
+        <div class="ob-style-title">Balanced ⚖️</div>
+        <div class="ob-style-desc">Quality matters, but so does price. The sensible middle ground.</div>
+      </div>
+      <div class="ob-style-option" onclick="selectStyle(this,'Splurge')" id="style-splurge">
+        <div class="ob-style-title">Splurge ✨</div>
+        <div class="ob-style-desc">Go premium. Recommend the best — I'll decide if it's worth it.</div>
+      </div>
+      <button class="btn" style="margin-top: 24px;" onclick="completeOnboarding()">Done →</button>
+    </div>
+
   </section>
 
   <!-- HOME -->
@@ -509,6 +593,11 @@
 
       <!-- "You asked for" -->
       <p class="result-asked" id="result-asked">You asked for "<span id="result-query-ref"></span>"</p>
+
+      <!-- Personalization tag (shown when preferences are set) -->
+      <div id="personalized-tag" style="display:none; margin-bottom:16px;">
+        <span class="personalized-tag" id="personalized-tag-text"></span>
+      </div>
 
       <!-- Image -->
       <div class="result-image-wrap">
@@ -701,6 +790,7 @@
     currentQuery: '',
     feedbackGiven: false,
     currentRec: null,
+    preferences: { categories: [], style: null }, // onboarding prefs
   };
 
   // ===== Mock recommendations =====
@@ -762,21 +852,59 @@
     }
   };
 
-  // Ambiguous queries → follow-up
+  // Ambiguous queries → follow-up (exact match or short-query fallback)
   const FOLLOWUP_MAP = {
-    'something nice':   { question: 'What kind of something?', options: ['A physical gift', 'An experience', 'For myself'] },
-    'a gift':           { question: 'Who is this gift for?',    options: ['Him', 'Her', 'A kid', 'Anyone works'] },
-    'gift':             { question: 'Who is this gift for?',    options: ['Him', 'Her', 'A kid', 'Anyone works'] },
-    'not sure':         { question: 'What area of your life?',  options: ['Work & productivity', 'Home & comfort', 'Fun & hobbies'] },
+    'something nice':   { question: 'What kind of something?',       options: ['A physical gift', 'An experience', 'For myself'] },
+    'a gift':           { question: 'Who is this gift for?',          options: ['Him', 'Her', 'A kid', 'Anyone works'] },
+    'gift':             { question: 'Who is this gift for?',          options: ['Him', 'Her', 'A kid', 'Anyone works'] },
+    'not sure':         { question: 'What area of your life?',        options: ['Work & productivity', 'Home & comfort', 'Fun & hobbies'] },
     'surprise me':      { question: 'What kind of day are you having?', options: ['Productive', 'Low energy', 'Adventurous'] },
+    'headphones':       { question: 'How will you mainly use them?',  options: ['Commuting', 'At my desk', 'Working out', 'Just home listening'] },
+    'speaker':          { question: 'Where will it live?',            options: ['Bedroom', 'Kitchen', 'Outdoors', 'Living room'] },
+    'laptop':           { question: 'What\'s it mainly for?',         options: ['Work / meetings', 'Creative work', 'Gaming', 'Just browsing'] },
+    'phone':            { question: 'What matters most to you?',      options: ['Camera quality', 'Battery life', 'Price', 'Brand loyalty'] },
+    'book':             { question: 'What mood are you in?',          options: ['Want to learn something', 'Escape & fiction', 'Inspiration', 'Laugh out loud'] },
+    'shoes':            { question: 'What are they for?',             options: ['Everyday wear', 'Running', 'A formal event', 'Hiking'] },
+    'watch':            { question: 'What vibe?',                     options: ['Classic dress watch', 'Sport & fitness', 'Smart watch', 'Statement piece'] },
+    'bag':              { question: 'What are you carrying?',         options: ['Laptop & work', 'Weekend travel', 'Just daily essentials', 'A gym bag'] },
+    'coffee':           { question: 'What\'s your setup like?',       options: ['I want a machine', 'Beans to brew at home', 'Favourite café-style drink', 'On-the-go'] },
+    'plant':            { question: 'How\'s your track record?',      options: ['I kill everything', 'Pretty reliable', 'I have a green thumb'] },
   };
+
+  // Returns a follow-up if query is genuinely ambiguous (exact match OR very short with no context)
+  function getFollowUp(query) {
+    const lower = query.toLowerCase().trim();
+    if (FOLLOWUP_MAP[lower]) return FOLLOWUP_MAP[lower];
+    // Very short (≤ 2 words) with no chip context → ask for area of life
+    const words = lower.split(/\s+/).filter(Boolean);
+    if (words.length <= 2 && !STATE.selectedBudget && !STATE.selectedExtra) {
+      return { question: 'Help me get this exactly right — what\'s the context?', options: ['It\'s a gift', 'For work', 'For myself', 'Just browsing'] };
+    }
+    return null;
+  }
 
   function pickMock(query) {
     const q = query.toLowerCase();
-    if (q.match(/gift|dad|mom|present|birthday/)) return MOCK.gift;
+    const style = STATE.preferences.style;
+
+    if (q.match(/gift|dad|mom|present|birthday/)) {
+      const rec = Object.assign({}, MOCK.gift);
+      if (style === 'Best value') { rec.why = rec.why + ' At this price point, it\'s genuinely hard to beat.'; rec.confidence = Math.min(rec.confidence, 78); }
+      if (style === 'Splurge')    { rec.why = rec.why + ' Worth every penny — this is the premium pick.'; rec.confidence = Math.max(rec.confidence, 90); }
+      return rec;
+    }
     if (q.match(/bored|fun|hobby|weekend/)) return MOCK.bored;
-    if (q.match(/work|desk|office|wfh|home/)) return MOCK.work;
-    if (q.match(/travel|trip|bag|luggage|backpack/)) return MOCK.travel;
+    if (q.match(/work|desk|office|wfh|home/)) {
+      const rec = Object.assign({}, MOCK.work);
+      if (style === 'Best value') { rec.alt = { name: 'BenQ ScreenBar Halo (older model)', price: '$70 refurb', blurb: 'Same great build, last-gen, half the price on eBay.' }; }
+      return rec;
+    }
+    if (q.match(/travel|trip|bag|luggage|backpack/)) {
+      const rec = Object.assign({}, MOCK.travel);
+      if (style === 'Best value') { rec.highlight = 'Osprey Farpoint 40'; rec.price = '$160'; rec.store = 'REI'; rec.confidence = 82; }
+      if (style === 'Splurge')    { rec.highlight = 'Tom Bihn Synik 30'; rec.price = '$380'; rec.confidence = 93; }
+      return rec;
+    }
     return MOCK.default;
   }
 
@@ -881,6 +1009,44 @@
 
   function signIn() {
     sessionStorage.setItem('exactly_signed_in', '1');
+    // Go to onboarding if prefs not yet set
+    const savedPrefs = sessionStorage.getItem('exactly_prefs');
+    if (savedPrefs) {
+      STATE.preferences = JSON.parse(savedPrefs);
+      go('home');
+    } else {
+      go('onboarding');
+    }
+  }
+
+  // ===== Onboarding =====
+  function toggleCat(el, cat) {
+    el.classList.toggle('selected');
+    const idx = STATE.preferences.categories.indexOf(cat);
+    if (idx === -1) STATE.preferences.categories.push(cat);
+    else STATE.preferences.categories.splice(idx, 1);
+  }
+
+  function selectStyle(el, style) {
+    document.querySelectorAll('.ob-style-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    STATE.preferences.style = style;
+  }
+
+  function obNextStep() {
+    document.getElementById('ob-step-1').classList.remove('active');
+    document.getElementById('ob-step-2').classList.add('active');
+    document.getElementById('ob-dot-2').classList.add('done');
+  }
+
+  function obSkip() {
+    STATE.preferences = { categories: [], style: null };
+    sessionStorage.setItem('exactly_prefs', JSON.stringify(STATE.preferences));
+    go('home');
+  }
+
+  function completeOnboarding() {
+    sessionStorage.setItem('exactly_prefs', JSON.stringify(STATE.preferences));
     go('home');
   }
 
@@ -923,8 +1089,8 @@
     if (!q) { err.textContent = 'Type what you need first.'; err.style.display = 'block'; return; }
     if (STATE.dailyUsage >= STATE.limit && !STATE.isPro) { go('limit'); return; }
 
-    // Check for follow-up trigger
-    const followup = FOLLOWUP_MAP[q.toLowerCase()];
+    // Check for follow-up trigger (exact match or short/vague query)
+    const followup = getFollowUp(q);
     if (followup) {
       renderFollowUp(followup, q);
       go('followup');
@@ -997,6 +1163,20 @@
 
     // Get It Now store label
     document.getElementById('get-it-now-store').textContent = 'via ' + rec.store;
+
+    // Personalization tag
+    const tagWrap = document.getElementById('personalized-tag');
+    const tagText = document.getElementById('personalized-tag-text');
+    const { categories, style } = STATE.preferences;
+    if (style || categories.length > 0) {
+      const parts = [];
+      if (style) parts.push(style);
+      if (categories.length > 0) parts.push(categories.slice(0, 2).join(' · '));
+      tagText.textContent = '✦ Tuned to: ' + parts.join(' · ');
+      tagWrap.style.display = 'block';
+    } else {
+      tagWrap.style.display = 'none';
+    }
 
     // Reset feedback
     document.getElementById('fb-label').textContent = 'Was this exactly right?';
