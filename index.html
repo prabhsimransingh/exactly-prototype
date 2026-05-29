@@ -440,39 +440,10 @@
   <!-- ONBOARDING -->
   <section class="screen" id="screen-onboarding" style="padding: 32px 24px;">
 
-    <!-- Step 1: Categories -->
+    <!-- Step 1: Style (only step now — categories removed) -->
     <div class="ob-step active" id="ob-step-1">
-      <div class="ob-progress">
-        <div class="ob-dot done" id="ob-dot-1"></div>
-        <div class="ob-dot" id="ob-dot-2"></div>
-      </div>
-      <p style="font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Step 1 of 2</p>
-      <h2 class="serif" style="font-size: 28px; font-weight: 500; line-height: 1.2; margin-bottom: 8px;">What do you usually<br/>shop for?</h2>
-      <p style="font-size: 14px; color: var(--muted); margin-bottom: 0;">Pick all that apply. We'll tailor picks to your world.</p>
-      <div class="ob-options" id="ob-categories">
-        <button class="ob-option" onclick="toggleCat(this,'Tech')">Tech</button>
-        <button class="ob-option" onclick="toggleCat(this,'Home')">Home</button>
-        <button class="ob-option" onclick="toggleCat(this,'Fashion')">Fashion</button>
-        <button class="ob-option" onclick="toggleCat(this,'Gifts')">Gifts</button>
-        <button class="ob-option" onclick="toggleCat(this,'Food')">Food</button>
-        <button class="ob-option" onclick="toggleCat(this,'Fitness')">Fitness</button>
-        <button class="ob-option" onclick="toggleCat(this,'Travel')">Travel</button>
-        <button class="ob-option" onclick="toggleCat(this,'Wellness')">Wellness</button>
-        <button class="ob-option" onclick="toggleCat(this,'Books')">Books</button>
-      </div>
-      <button class="btn" onclick="obNextStep()">Next →</button>
-      <button class="btn secondary" style="margin-top: 10px;" onclick="obSkip()">Skip for now</button>
-    </div>
-
-    <!-- Step 2: Style -->
-    <div class="ob-step" id="ob-step-2">
-      <div class="ob-progress">
-        <div class="ob-dot done"></div>
-        <div class="ob-dot done"></div>
-      </div>
-      <p style="font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Step 2 of 2</p>
-      <h2 class="serif" style="font-size: 28px; font-weight: 500; line-height: 1.2; margin-bottom: 8px;">How do you like<br/>to shop?</h2>
-      <p style="font-size: 14px; color: var(--muted); margin-bottom: 24px;">We'll match picks to your style.</p>
+      <h2 class="serif" style="font-size: 28px; font-weight: 500; line-height: 1.2; margin-bottom: 8px; margin-top: 8px;">How do you like<br/>to shop?</h2>
+      <p style="font-size: 14px; color: var(--muted); margin-bottom: 24px;">We'll match picks to your style. You can change this any time.</p>
       <div class="ob-style-option" onclick="selectStyle(this,'Best value')" id="style-value">
         <div class="ob-style-title">Best value 💰</div>
         <div class="ob-style-desc">Great quality without overpaying. Smart picks that punch above their price.</div>
@@ -486,6 +457,7 @@
         <div class="ob-style-desc">Go premium. Recommend the best — I'll decide if it's worth it.</div>
       </div>
       <button class="btn" style="margin-top: 24px;" onclick="completeOnboarding()">Done →</button>
+      <button class="btn secondary" style="margin-top: 10px;" onclick="obSkip()">Skip for now</button>
     </div>
 
   </section>
@@ -786,7 +758,7 @@
     currentQuery: '',
     feedbackGiven: false,
     currentRec: null,
-    preferences: { categories: [], style: null }, // onboarding prefs
+    preferences: { style: null }, // onboarding prefs
   };
 
   // ===== Mock recommendations =====
@@ -883,24 +855,24 @@
     const q = query.toLowerCase();
     const style = STATE.preferences.style;
 
-    if (q.match(/gift|dad|mom|present|birthday/)) {
-      const rec = Object.assign({}, MOCK.gift);
-      if (style === 'Best value') { rec.why = rec.why + ' At this price point, it\'s genuinely hard to beat.'; rec.confidence = Math.min(rec.confidence, 78); }
-      if (style === 'Splurge')    { rec.why = rec.why + ' Worth every penny — this is the premium pick.'; rec.confidence = Math.max(rec.confidence, 90); }
-      return rec;
-    }
+    // For gift queries, ignore personal style — the recipient's needs matter more
+    if (q.match(/gift|dad|mom|present|birthday/)) return MOCK.gift;
+
     if (q.match(/bored|fun|hobby|weekend/)) return MOCK.bored;
+
     if (q.match(/work|desk|office|wfh|home/)) {
       const rec = Object.assign({}, MOCK.work);
       if (style === 'Best value') { rec.alt = { name: 'BenQ ScreenBar Halo (older model)', price: '$70 refurb', blurb: 'Same great build, last-gen, half the price on eBay.' }; }
       return rec;
     }
+
     if (q.match(/travel|trip|bag|luggage|backpack/)) {
       const rec = Object.assign({}, MOCK.travel);
       if (style === 'Best value') { rec.highlight = 'Osprey Farpoint 40'; rec.price = '$160'; rec.store = 'REI'; rec.confidence = 82; }
       if (style === 'Splurge')    { rec.highlight = 'Tom Bihn Synik 30'; rec.price = '$380'; rec.confidence = 93; }
       return rec;
     }
+
     return MOCK.default;
   }
 
@@ -1016,27 +988,14 @@
   }
 
   // ===== Onboarding =====
-  function toggleCat(el, cat) {
-    el.classList.toggle('selected');
-    const idx = STATE.preferences.categories.indexOf(cat);
-    if (idx === -1) STATE.preferences.categories.push(cat);
-    else STATE.preferences.categories.splice(idx, 1);
-  }
-
   function selectStyle(el, style) {
     document.querySelectorAll('.ob-style-option').forEach(o => o.classList.remove('selected'));
     el.classList.add('selected');
     STATE.preferences.style = style;
   }
 
-  function obNextStep() {
-    document.getElementById('ob-step-1').classList.remove('active');
-    document.getElementById('ob-step-2').classList.add('active');
-    document.getElementById('ob-dot-2').classList.add('done');
-  }
-
   function obSkip() {
-    STATE.preferences = { categories: [], style: null };
+    STATE.preferences = { style: null };
     sessionStorage.setItem('exactly_prefs', JSON.stringify(STATE.preferences));
     go('home');
   }
@@ -1163,12 +1122,9 @@
     // Personalization tag
     const tagWrap = document.getElementById('personalized-tag');
     const tagText = document.getElementById('personalized-tag-text');
-    const { categories, style } = STATE.preferences;
-    if (style || categories.length > 0) {
-      const parts = [];
-      if (style) parts.push(style);
-      if (categories.length > 0) parts.push(categories.slice(0, 2).join(' · '));
-      tagText.textContent = '✦ Tuned to: ' + parts.join(' · ');
+    const { style } = STATE.preferences;
+    if (style) {
+      tagText.textContent = '✦ Tuned to: ' + style;
       tagWrap.style.display = 'block';
     } else {
       tagWrap.style.display = 'none';
