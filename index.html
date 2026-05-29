@@ -239,22 +239,33 @@
     color: var(--text-soft); text-align: center; margin-bottom: 24px;
     line-height: 1.4;
   }
-  /* Stats table */
-  .stats-table {
-    border-top: 1px solid var(--text); border-bottom: 1px solid var(--text);
-    padding: 18px 0; margin-bottom: 24px; display: flex; flex-direction: column; gap: 10px;
+  /* Product meta row — price · store · match in one line */
+  .result-meta {
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: 6px 14px;
+    margin-bottom: 28px;
   }
-  .stat-row {
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 13px;
+  .result-price {
+    font-family: 'Fraunces', serif; font-size: 26px; font-weight: 600;
+    color: var(--text);
   }
-  .stat-row:not(:last-child) { padding-bottom: 10px; border-bottom: 1px solid var(--border-soft); }
-  .stat-label { font-family: monospace; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.2px; }
-  .stat-value { font-size: 13px; font-weight: 500; color: var(--text); font-family: monospace; }
-  .stat-value.accent { color: var(--accent); }
-  .stat-value.green { color: var(--green); }
+  .result-meta-dot { color: var(--border); font-size: 18px; }
+  .result-store {
+    font-size: 14px; color: var(--muted); font-weight: 500;
+  }
+  .result-match {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px; border-radius: 100px;
+    font-size: 12px; font-weight: 700;
+    background: rgba(5,150,105,0.08); color: var(--green);
+    border: 1px solid rgba(5,150,105,0.2);
+  }
+  .result-match.warm {
+    background: rgba(232,98,42,0.08); color: var(--accent);
+    border-color: rgba(232,98,42,0.2);
+  }
   /* Why */
-  .why-label { font-family: monospace; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.2px; margin-bottom: 12px; }
+  .why-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--muted); letter-spacing: 0.4px; margin-bottom: 10px; }
   .why-text {
     font-family: 'Fraunces', serif; font-size: 20px; font-weight: 400;
     color: var(--text); line-height: 1.35; margin-bottom: 24px;
@@ -283,7 +294,7 @@
   }
   .alt-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .alt-card-name { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; color: var(--text); }
-  .alt-card-price { font-family: monospace; font-size: 14px; font-weight: 500; color: var(--text); }
+  .alt-card-price { font-size: 14px; font-weight: 600; color: var(--text); }
   .alt-card-blurb { font-size: 14px; color: var(--text-soft); line-height: 1.4; }
   /* Next step card */
   .next-card {
@@ -608,28 +619,13 @@
       <p class="result-name" id="result-highlight"></p>
       <p class="result-tail" id="result-tail"></p>
 
-      <!-- Stats table -->
-      <div class="stats-table">
-        <div class="stat-row">
-          <span class="stat-label">Price</span>
-          <span class="stat-value" id="stat-price"></span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">Source</span>
-          <span class="stat-value" id="stat-store"></span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">For</span>
-          <span class="stat-value">You, exactly</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">Match</span>
-          <span class="stat-value" id="stat-match"></span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">Verdict</span>
-          <span class="stat-value accent">Hand-picked</span>
-        </div>
+      <!-- Meta row: price · store · match -->
+      <div class="result-meta">
+        <span class="result-price" id="stat-price"></span>
+        <span class="result-meta-dot">·</span>
+        <span class="result-store" id="stat-store"></span>
+        <span class="result-meta-dot">·</span>
+        <span class="result-match" id="stat-match"></span>
       </div>
 
       <!-- Why this one -->
@@ -1151,8 +1147,8 @@
     // Match badge
     const conf = rec.confidence || 70;
     const matchEl = document.getElementById('stat-match');
-    matchEl.textContent = conf + '%';
-    matchEl.className = 'stat-value ' + (conf >= 80 ? 'green' : 'accent');
+    matchEl.textContent = conf + '% match';
+    matchEl.className = 'result-match' + (conf >= 80 ? '' : ' warm');
 
     // Alt card
     if (rec.alt) {
