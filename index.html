@@ -342,37 +342,6 @@
   .vault-highlight { font-family: 'Fraunces', serif; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
   .vault-meta { font-size: 12px; color: var(--muted); }
 
-  /* ── Onboarding ──────────────────────────────────── */
-  .ob-step { display: none; }
-  .ob-step.active { display: block; }
-  .ob-progress { display: flex; gap: 6px; margin-bottom: 32px; }
-  .ob-dot { height: 3px; flex: 1; border-radius: 2px; background: var(--border); transition: background .2s; }
-  .ob-dot.done { background: var(--accent); }
-  .ob-options { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 32px; }
-  .ob-option {
-    padding: 10px 18px; border-radius: 100px;
-    border: 1.5px solid var(--border); background: var(--surface);
-    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
-    color: var(--text); cursor: pointer; transition: all .15s;
-  }
-  .ob-option:hover { border-color: var(--accent); }
-  .ob-option.selected { border-color: var(--accent); background: rgba(232,98,42,0.1); color: var(--accent); }
-  .ob-style-option {
-    background: var(--surface); border: 1.5px solid var(--border);
-    border-radius: 16px; padding: 18px 20px; margin-bottom: 10px;
-    cursor: pointer; transition: border-color .15s;
-  }
-  .ob-style-option:hover { border-color: var(--accent); }
-  .ob-style-option.selected { border-color: var(--accent); background: rgba(232,98,42,0.06); }
-  .ob-style-title { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-  .ob-style-desc { font-size: 13px; color: var(--muted); }
-  .personalized-tag {
-    display: inline-block; padding: 3px 10px; border-radius: 100px;
-    background: rgba(232,98,42,0.1); border: 1px solid rgba(232,98,42,0.25);
-    font-size: 11px; font-weight: 600; color: var(--accent);
-    margin-bottom: 16px; font-family: monospace; text-transform: uppercase; letter-spacing: 0.3px;
-  }
-
   /* ── Oracle account card ──────────────────────────── */
   .oracle-card {
     background: var(--surface); border: 1px solid var(--border);
@@ -435,31 +404,6 @@
         </p>
       </div>
     </div>
-  </section>
-
-  <!-- ONBOARDING -->
-  <section class="screen" id="screen-onboarding" style="padding: 32px 24px;">
-
-    <!-- Step 1: Style (only step now — categories removed) -->
-    <div class="ob-step active" id="ob-step-1">
-      <h2 class="serif" style="font-size: 28px; font-weight: 500; line-height: 1.2; margin-bottom: 8px; margin-top: 8px;">How do you like<br/>to shop?</h2>
-      <p style="font-size: 14px; color: var(--muted); margin-bottom: 24px;">We'll match picks to your style. You can change this any time.</p>
-      <div class="ob-style-option" onclick="selectStyle(this,'Best value')" id="style-value">
-        <div class="ob-style-title">Best value 💰</div>
-        <div class="ob-style-desc">Great quality without overpaying. Smart picks that punch above their price.</div>
-      </div>
-      <div class="ob-style-option" onclick="selectStyle(this,'Balanced')" id="style-balanced">
-        <div class="ob-style-title">Balanced ⚖️</div>
-        <div class="ob-style-desc">Quality matters, but so does price. The sensible middle ground.</div>
-      </div>
-      <div class="ob-style-option" onclick="selectStyle(this,'Splurge')" id="style-splurge">
-        <div class="ob-style-title">Splurge ✨</div>
-        <div class="ob-style-desc">Go premium. Recommend the best — I'll decide if it's worth it.</div>
-      </div>
-      <button class="btn" style="margin-top: 24px;" onclick="completeOnboarding()">Done →</button>
-      <button class="btn secondary" style="margin-top: 10px;" onclick="obSkip()">Skip for now</button>
-    </div>
-
   </section>
 
   <!-- HOME -->
@@ -576,11 +520,6 @@
 
       <!-- "You asked for" -->
       <p class="result-asked" id="result-asked">You asked for "<span id="result-query-ref"></span>"</p>
-
-      <!-- Personalization tag (shown when preferences are set) -->
-      <div id="personalized-tag" style="display:none; margin-bottom:16px;">
-        <span class="personalized-tag" id="personalized-tag-text"></span>
-      </div>
 
       <!-- Image -->
       <div class="result-image-wrap">
@@ -758,7 +697,6 @@
     currentQuery: '',
     feedbackGiven: false,
     currentRec: null,
-    preferences: { style: null }, // onboarding prefs
   };
 
   // ===== Mock recommendations =====
@@ -853,26 +791,10 @@
 
   function pickMock(query) {
     const q = query.toLowerCase();
-    const style = STATE.preferences.style;
-
-    // For gift queries, ignore personal style — the recipient's needs matter more
     if (q.match(/gift|dad|mom|present|birthday/)) return MOCK.gift;
-
-    if (q.match(/bored|fun|hobby|weekend/)) return MOCK.bored;
-
-    if (q.match(/work|desk|office|wfh|home/)) {
-      const rec = Object.assign({}, MOCK.work);
-      if (style === 'Best value') { rec.alt = { name: 'BenQ ScreenBar Halo (older model)', price: '$70 refurb', blurb: 'Same great build, last-gen, half the price on eBay.' }; }
-      return rec;
-    }
-
-    if (q.match(/travel|trip|bag|luggage|backpack/)) {
-      const rec = Object.assign({}, MOCK.travel);
-      if (style === 'Best value') { rec.highlight = 'Osprey Farpoint 40'; rec.price = '$160'; rec.store = 'REI'; rec.confidence = 82; }
-      if (style === 'Splurge')    { rec.highlight = 'Tom Bihn Synik 30'; rec.price = '$380'; rec.confidence = 93; }
-      return rec;
-    }
-
+    if (q.match(/bored|fun|hobby|weekend/))       return MOCK.bored;
+    if (q.match(/work|desk|office|wfh|home/))     return MOCK.work;
+    if (q.match(/travel|trip|bag|luggage|backpack/)) return MOCK.travel;
     return MOCK.default;
   }
 
@@ -977,33 +899,9 @@
 
   function signIn() {
     sessionStorage.setItem('exactly_signed_in', '1');
-    // Go to onboarding if prefs not yet set
-    const savedPrefs = sessionStorage.getItem('exactly_prefs');
-    if (savedPrefs) {
-      STATE.preferences = JSON.parse(savedPrefs);
-      go('home');
-    } else {
-      go('onboarding');
-    }
-  }
-
-  // ===== Onboarding =====
-  function selectStyle(el, style) {
-    document.querySelectorAll('.ob-style-option').forEach(o => o.classList.remove('selected'));
-    el.classList.add('selected');
-    STATE.preferences.style = style;
-  }
-
-  function obSkip() {
-    STATE.preferences = { style: null };
-    sessionStorage.setItem('exactly_prefs', JSON.stringify(STATE.preferences));
     go('home');
   }
 
-  function completeOnboarding() {
-    sessionStorage.setItem('exactly_prefs', JSON.stringify(STATE.preferences));
-    go('home');
-  }
 
   function signOut() {
     sessionStorage.removeItem('exactly_signed_in');
@@ -1118,17 +1016,6 @@
 
     // Get It Now store label
     document.getElementById('get-it-now-store').textContent = 'via ' + rec.store;
-
-    // Personalization tag
-    const tagWrap = document.getElementById('personalized-tag');
-    const tagText = document.getElementById('personalized-tag-text');
-    const { style } = STATE.preferences;
-    if (style) {
-      tagText.textContent = '✦ Tuned to: ' + style;
-      tagWrap.style.display = 'block';
-    } else {
-      tagWrap.style.display = 'none';
-    }
 
     // Reset feedback
     document.getElementById('fb-label').textContent = 'Was this exactly right?';
